@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+
+<project name="testsite" basedir="." default="main">
+    <property file="./build.properties" />
+
+    <property name="builddir" value="./build/testsite" override="true" />
+    <property name="srcdir"   value="./src" override="true" />
+
+
+    <!-- Fileset for all files -->
+    <fileset dir="." id="allfiles">
+        <include name="**" />
+    </fileset>
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT) Target: main                        -->
+    <!-- ============================================  -->
+    <target name="main" description="main target">
+	<echo msg="Stale branches (consider removal):" />
+	<exec command="git branch -r --merged | grep -v '/master' | grep -v '/develop'" passthru="true" checkreturn="true" dir="${project.basedir}" />
+    </target>
+</project>
