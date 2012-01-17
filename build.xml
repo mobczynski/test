@@ -19,4 +19,15 @@
 	<echo msg="Stale branches (consider removal):" />
 	<exec command="git branch -r --merged | grep -v '/master' | grep -v '/develop'" passthru="true" checkreturn="true" dir="${project.basedir}" />
     </target>
+
+	<target name="update-target" description="Pulls and merged target branch into current one" depends="_current-branch-name">
+		<echo msg="Current brach: ${current.branch.name}" />
+		<property name="update-target-name" value="master" override="true" />
+		<exec command="git checkout ${update-target-name} &amp;&amp; git merge --no-ff ${current.branch.name} &amp;&amp; git push origin ${update-target-name} &amp;&amp; git checkout ${current.branch.name}" passthru="true" checkreturn="true" escape="false" />
+</target>
+
+<target name="_current-branch-name" hidden="true" description="Displays current branch name">
+	<exec command="git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'" outputProperty="current.branch.name" checkreturn="true" />
+	<echo msg="property: ${current.branch.name}" />
+</target>
 </project>
